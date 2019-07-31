@@ -70,12 +70,9 @@ public class Main extends VerticalLayout {
                         data.increaseScore(score);
                         ds.saveLecturer(data);
 
-                        // Save cookie
-                        Cookie cookie = new Cookie(data.getuId(), score.toString());
-                        cookie.setMaxAge(1024 * 1024);
-                        cookie.setPath(VaadinService.getCurrentRequest().getContextPath());
-                        VaadinService.getCurrentResponse().addCookie(cookie);
+                        saveCookie(data.getuId(), score.toString());
 
+                        // TODO: Detect, why cookie works so slow...
                         getUI().get().getCurrent().getPage().reload();
                     });
 
@@ -94,6 +91,12 @@ public class Main extends VerticalLayout {
         setHorizontalComponentAlignment(Alignment.CENTER, logo);
     }
 
+    private void saveCookie(String name, String value) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setMaxAge(1024 * 1024);
+        cookie.setPath(VaadinService.getCurrentRequest().getContextPath());
+        VaadinService.getCurrentResponse().addCookie(cookie);
+    }
 
     private void updateGrid() {
         lecturerGrid.setItems(ds.findAllLecturers());
